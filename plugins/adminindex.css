@@ -1,0 +1,125 @@
+* {
+			font-family: Georgia, serif;
+
+		}
+		body {
+			background: white;
+			background-color: #f4f6f9;	
+		}
+		.blog-panel {
+			width: 100%;
+			font-style: oblique;
+			height: 60px;
+			font-weight: bold;
+			border-bottom: #d6d8d9 1px solid;
+		}
+
+		.blog-panel h5 {
+			width: 100%;
+			line-height: 60px;
+			height: 60px;
+			cursor: pointer;
+		}
+		.blog-panel h5 a {
+			text-decoration: none;
+			color: #d6d8d9;
+		}
+		.col-md-2 {
+			margin: 0;
+			padding: 0;
+		}
+		.side-bar {
+			width: 70%;
+			text-align: center;
+			background-color: #343a40;
+			height: 100vh;
+			box-shadow: 5px 10px 18px #343a40;
+			transition: 0.5s;
+			padding: 0px;
+			margin: 0px;
+			color: white;
+			/*width: 300px !important;*/
+		}
+		.side-bar:hover .nav-link{
+			transition: 1s;
+			border-left: #d6d8d9 1px solid;
+			border-right: #d6d8d9 1px solid;
+		}
+
+		.side-bar:hover img {
+			transition: 0.5s;
+			margin-right: 20px;
+			size: 40px;
+		}
+		.side-bar:hover{
+			box-shadow: 10px 20px 28px #343a40		;
+			width: 100%;
+		}
+
+		.nav {
+			margin-left: 20px;
+			margin-right: 20px;
+			margin-top: 20px;
+		}
+		.nav-item {
+			/*width: 190px;*/
+		}
+		.nav-link {
+			margin-bottom: 10px;
+			color: #d6d8d9;
+			width: 100%;
+			transition: background-color 0.5s;
+			/*border-radius: 100px;*/
+		}
+		.nav-link:hover {
+			color: black;
+			background-color: #d6d8d9;
+		}
+		.user {
+			border-bottom: #d6d8d9 1px solid;
+		}
+		.user p{
+			font-weight: bold;
+			padding-top: 20px;
+			color: #d6d8d9;
+		}
+		.search {
+			padding-top: 10px;
+		}
+		.search .form-control{
+			width: 200px;
+			display: inline;
+		}
+		.form-group button {
+			margin-bottom: 3px;
+			margin-left: -4px;
+		}
+		.table {
+			/*background-color: #fff;*/
+			color: black;
+			background-color: #fff;
+			border-radius: 10px;
+			padding-bottom: 20px;
+		}
+		.table table {
+			width: 1000px;
+		}
+		.table h3 {
+			padding: 10px;
+			margin: 0px;
+			border-bottom: 1px solid black;
+			margin-bottom: 10px;
+		}
+		.footer {	
+			position: absolute;
+			top: 605px;
+			left: 0px;
+			width: 100%;
+			background-color: rgba(255,255,255, 0.5);
+			border-radius: 5px;
+			height: 50px;
+			padding-top: 8px;
+		}
+		.footer p {
+			display: inline;
+		}
