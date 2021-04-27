@@ -57,7 +57,10 @@ if ($_POST) {
 		h3 {
 			padding-top: 10px;
 		}
-
+		a {
+			margin-top: 10px;
+			float: right;
+		}
 	</style>
 </head>
 <body>
@@ -74,7 +77,8 @@ if ($_POST) {
 					<label for="password">Password</label>
 					<input type="password" name="password" class="form-control">
 
-					<input type="submit" class="btn btn-primary" name="submit" value="login">
+					<input type="submit" class="btn btn-outline-primary" name="submit" value="Login">
+					<a href="register.php" class="btn btn-outline-primary">Sing Up</a>
 				</form>
 			</div>
 		</div>

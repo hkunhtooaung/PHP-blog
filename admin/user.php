@@ -32,24 +32,24 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 
 					if (empty($_POST['search'])) {
 						
-						$stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+						$stmt = $pdo->prepare("SELECT * FROM user ORDER BY id DESC");
 						$stmt->execute();
 						$rawresult = $stmt->fetchAll();
 						$total_pages= ceil(count($rawresult) / $numOfrecs);
 
-						$stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecs");
+						$stmt = $pdo->prepare("SELECT * FROM user ORDER BY id DESC LIMIT $offset,$numOfrecs");
 						$stmt->execute();
 						$result = $stmt->fetchAll();
 					
 					} else {
 						
 						$searchKey = $_POST['search'];
-						$stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
+						$stmt = $pdo->prepare("SELECT * FROM user WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
 						$stmt->execute();
 						$rawresult = $stmt->fetchAll();
 						$total_pages= ceil(count($rawresult) / $numOfrecs);
 
-						$stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
+						$stmt = $pdo->prepare("SELECT * FROM user WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
 						$stmt->execute();
 						$result = $stmt->fetchAll();
 
@@ -61,13 +61,13 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 					<table class="table table-bordered" align="center">
 						<h3>Blog Listing</h3>
 						<div>
-							<a href="add.php" class="btn btn-success mb-2 ml-5">Create New Blog</a>
+							<a href="useradd.php" class="btn btn-success mb-2 ml-5">Create New User</a>
 						</div>
 						<thead>
 							<tr>
 								<th scope="col">No</th>
-								<th scope="col">Title</th>
-								<th scope="col">Description</th>
+								<th scope="col">Uername</th>
+								<th scope="col">Email</th>
 								<th scope="col">Action</th>
 							</tr>
 						</thead>
@@ -78,11 +78,11 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 								foreach ($result as $value) { ?>
 								<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $value['title']; ?></td>
-									<td><?php echo substr($value['content'],0,10); ?></td>
+									<td><?php echo $value['name']; ?></td>
+									<td><?php echo substr($value['email'],0,10); ?></td>
 									<td>
-										<a href="edit.php?id=<?php echo $value['id']; ?>" class="btn btn-outline-warning">Edit</a>
-										<a href="delete.php?id=<?php echo $value['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this item')">Delete</a>
+										<a href="useredit.php?id=<?php echo $value['id']; ?>" class="btn btn-outline-warning">Edit</a>
+										<a href="userdelete.php?id=<?php echo $value['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this item')">Delete</a>
 									</td>
 								</tr>	
 							<?php
