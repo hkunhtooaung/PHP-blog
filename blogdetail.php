@@ -9,14 +9,20 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $stmtcmt = $pdo->prepare("SELECT * FROM comments WHERE post_id=$blogId");
 $stmtcmt->execute();
-$cmresult = $stmtcmt->fetch(PDO::FETCH_ASSOC);
+$cmResult = $stmtcmt->fetchAll();
 
-$author_id = $cmresult['author_id'];
-$stmtau = $pdo->prepare("SELECT * FROM user WHERE id=$author_id");
-$stmtau->execute();
-$auresult = $stmtau->fetch(PDO::FETCH_ASSOC);
-
-
+$auResult = [];
+if ($cmResult) {
+	foreach ($cmResult as $key => $value) {
+		$author_id = $cmResult[$key]['author_id'];
+		$stmtau = $pdo->prepare("SELECT * FROM user WHERE id=$author_id");
+		$stmtau->execute();
+		$auResult[] = $stmtau->fetchAll(); 
+	}
+}
+// echo "<pre>";
+// print_r($auResult);
+// print_r($auResult[2][0]['name']);
 if ($_POST) {
 	$comment = $_POST['comment']; 
 	$stmt = $pdo->prepare("INSERT INTO comments(content,author_id,post_id) VALUES (:content,:author_id,:post_id)");
@@ -34,51 +40,7 @@ if ($_POST) {
 <head>
 	<title>Blog Detail</title>
 	<link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
-	<style type="text/css">
-		h4 {
-			margin-top: 10px;
-		}
-		.card-header {
-			height: 50px;
-			/*background-color: red;*/
-		}
-		.card {
-			/*background-color: #000;*/
-			margin: 0;
-			padding: 0;
-			text-align: center;/*
-			color: rgb(255,255,255, 0.5);	*/
-		}
-
-		img {
-			border-radius: 10px;	
-		}
-		.card-header {
-			margin: 0!important;
-			padding: 0!important;
-		}
-		.card-footer h6 img {
-			border-radius: 20px;
-		}
-		.card div {
-			width: 100%;
-		}
-
-		.nav {
-			margin: 20px;
-			display: relative !important;
-			top: 20px;
-		}
-		.nav nav{
-			margin-left: 500px !important;
-		}
-		.footer {
-			margin-top: 20px;
-		}
-		p {
-			text-decoration: justify;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="plugins/blogdetail.css">
 </head>
 <body>
 	<div class="container">
@@ -99,10 +61,24 @@ if ($_POST) {
 						<a class="btn btn-warning" href="index.php">Go Back</a>
 						<h2 align="left">Comments</h2>
 
-						<h6 align="left" style="display:inline-block; float:left;"><strong><?php echo $auresult['name'] ?></strong></h6><span style="float: right;"><font size="2"><?php echo $cmresult['created_at'] ?></font></span>
-						<p align="left" style="clear: both;"> 
-							<?php echo $cmresult['content']; ?>
-						</p><hr>
+						<?php 
+						if($cmResult) {
+							foreach($cmResult as $key => $value){
+						?>
+							<h6 align="left" style="display:inline-block; float:left;">
+								<strong><?php echo $auResult[$key][0]['name'] ?></strong>
+							</h6>
+							 
+							<span style="float: right;"><font size="2"><?php echo $value['created_at'] ?></font></span>
+
+							<p align="left" style="clear: both;"> 
+								<?php echo $value['content']; ?>
+							</p><hr>
+
+						<?php	
+							}
+						}
+						?>
 
 						<div class="form-group">
 							<form action="" method="post">

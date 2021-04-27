@@ -1,6 +1,7 @@
 <?php 
 session_start();
 require "../config/config.php";
+
 error_reporting(1);
 if ($_SESSION['role'] === "0") {
 	echo "<script>alert('You are not an admin, Sorry');window.location.href='../index.php'</script>";
@@ -9,13 +10,22 @@ if ($_SESSION['role'] === "0") {
 if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 	header("location: login.php");
 }
-?>
+
+if ($_POST['search']) {
+	setcookie('search', $_POST['search'], time() + (86400 * 30), "/");
+} else {
+	if (empty($_GET['pageno'])) {
+		unset($_COOKIE['search']);
+		setcookie('search', null, -1, '/');
+	}
+}
+?> 
 <?php include('header.html') ?>
 		<div class="col-md-10">
 			<div class="content">
 				<div class="search">
 					<div class="form-group">
-						<form action="index.php" method="post">
+						<form action="user.php" method="post">
 							<input class="form-control" placeholder="search" type="text" name="search">
 							<button type="submit" class="btn btn-outline-primary">Search</button>
 						</form>
@@ -27,10 +37,10 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 					} else {
 						$pageno = 1;
 					}
-					$numOfrecs = 2;
+					$numOfrecs = 5;
 					$offset = ($pageno - 1) * $numOfrecs;
 
-					if (empty($_POST['search'])) {
+					if (empty($_POST['search']) && empty($_COOKIE['search'])) {
 						
 						$stmt = $pdo->prepare("SELECT * FROM user ORDER BY id DESC");
 						$stmt->execute();
@@ -43,13 +53,13 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 					
 					} else {
 						
-						$searchKey = $_POST['search'];
-						$stmt = $pdo->prepare("SELECT * FROM user WHERE title LIKE '%$searchKey%' ORDER BY id DESC");
+						$searchKey = $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+						$stmt = $pdo->prepare("SELECT * FROM user WHERE name LIKE '%$searchKey%' ORDER BY id DESC");
 						$stmt->execute();
 						$rawresult = $stmt->fetchAll();
 						$total_pages= ceil(count($rawresult) / $numOfrecs);
 
-						$stmt = $pdo->prepare("SELECT * FROM user WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
+						$stmt = $pdo->prepare("SELECT * FROM user WHERE name LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecs");
 						$stmt->execute();
 						$result = $stmt->fetchAll();
 
@@ -59,7 +69,7 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 				?>
 				<div class="table">
 					<table class="table table-bordered" align="center">
-						<h3>Blog Listing</h3>
+						<h3>User Listing</h3>
 						<div>
 							<a href="useradd.php" class="btn btn-success mb-2 ml-5">Create New User</a>
 						</div>

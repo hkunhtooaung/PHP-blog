@@ -14,7 +14,15 @@ if ($_POST) {
 	$name = $_POST['name'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-	
+
+	$stmt = $pdo->prepare("SELECT * FROM user WHERE email=:email");
+	$stmt->bindValue(':email',$email);
+	$stmt->execute();
+	$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if ($user) {
+		echo "<script>alert('Email Duplicated')</script>";
+	} else {
 		$stmt = $pdo->prepare("INSERT INTO user(name,email,password) VALUES (:name,:email,:password)");
 		$result = $stmt->execute(
 			array(':name'=>$name, ':email'=>$email, ':password'=>$password)
@@ -22,6 +30,12 @@ if ($_POST) {
 		if ($result) {
 			echo "<script>alert('Successfully Created User');window.location.href='user.php'</script>";
 		}
+	}
+
+
+	
+	
+		
 }
 ?>
 

@@ -1,0 +1,43 @@
+h4 {
+margin-top: 10px;
+}
+.card-header {
+height: 50px;
+/*background-color: red;*/
+}
+.card {
+/*background-color: #000;*/
+margin: 0;
+padding: 0;
+text-align: center;/*
+color: rgb(255,255,255, 0.5);	*/
+}
+
+img {
+border-radius: 10px;	
+}
+.card-header {
+margin: 0!important;
+padding: 0!important;
+}
+.card-footer h6 img {
+border-radius: 20px;
+}
+.card div {
+width: 100%;
+}
+
+.nav {
+margin: 20px;
+display: relative !important;
+top: 20px;
+}
+.nav nav{
+margin-left: 500px !important;
+}
+.footer {
+margin-top: 20px;
+}
+p {
+text-decoration: justify;
+}

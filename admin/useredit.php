@@ -21,13 +21,21 @@ if ($_POST) {
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 	
+		$stmt = $pdo->prepare("SELECT * FROM user WHERE email=:email AND id!=:id");
+		$stmt->execute(
+			array(':email'=>$email, ':id'=>$id)
+		);
+		$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-		$stmt = $pdo->prepare("UPDATE user set name='$name', email='$email', password='$password' WHERE id='$id'");
-		$result = $stmt->execute();
-		if ($result) {
-			echo "<script>alert('Successfully Updated');window.location.href='user.php'</script>";
+		if ($user) {
+			echo "<script>alert('Email Duplicated')</script>";
+		} else {
+			$stmt = $pdo->prepare("UPDATE user set name='$name', email='$email', password='$password' WHERE id='$id'");
+			$result = $stmt->execute();
+			if ($result) {
+				echo "<script>alert('Successfully Updated');window.location.href='user.php'</script>";
+			}
 		}
-
 }
 ?>
 <?php include('header.html') ?>
