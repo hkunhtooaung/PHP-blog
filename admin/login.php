@@ -1,6 +1,8 @@
 <?php 
 session_start();
 require "../config/config.php";
+require "../config/common.php";
+
 
 if ($_POST) {
 	$email = $_POST['email'];
@@ -12,7 +14,9 @@ if ($_POST) {
 	$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 	if ($user) {
-		if ($user['password'] == $password) {
+
+		// $user['password'] == $password
+		if (password_verify($password,$user['password'])) {
 			$_SESSION['user_id'] = $user['id'];
 			$_SESSION['username'] = $user['name'];
 			$_SESSION['logged_in'] = time(); 
@@ -68,6 +72,7 @@ if ($_SESSION['user_id']) {
 				<h3 align="center">Admin Login</h3>
 				<hr>
 				<form action="" method="post">
+					<input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
 					<label for="email">Email</label>
 					<input type="email" name="email" class="form-control">
 					<label for="password">Password</label>

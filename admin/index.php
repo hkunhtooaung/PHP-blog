@@ -1,7 +1,8 @@
 <?php 
 session_start();
 require "../config/config.php";
-error_reporting(1);
+require "../config/common.php";
+error_reporting(2);
 if ($_SESSION['role'] === "0") {
 	echo "<script>alert('You are not an admin, Sorry');window.location.href='../index.php'</script>";
 }
@@ -25,6 +26,7 @@ if ($_POST['search']) {
 				<div class="search">
 					<div class="form-group">
 						<form action="index.php" method="post">
+							<input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
 							<input class="form-control" placeholder="search" type="text" name="search">
 							<button type="submit" class="btn btn-outline-primary">Search</button>
 						</form>
@@ -86,9 +88,9 @@ if ($_POST['search']) {
 								$i = 1;
 								foreach ($result as $value) { ?>
 								<tr>
-									<td><?php echo $i; ?></td>
-									<td><?php echo $value['title']; ?></td>
-									<td><?php echo substr($value['content'],0,10); ?></td>
+									<td><?php echo escape($i); ?></td>
+									<td><?php echo escape($value['title']); ?></td>
+									<td><?php echo escape(substr($value['content'],0,10)); ?></td>
 									<td>
 										<a href="edit.php?id=<?php echo $value['id']; ?>" class="btn btn-outline-warning">Edit</a>
 										<a href="delete.php?id=<?php echo $value['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this item')">Delete</a>

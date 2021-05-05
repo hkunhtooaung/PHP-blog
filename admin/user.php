@@ -1,6 +1,7 @@
 <?php 
 session_start();
 require "../config/config.php";
+require "../config/common.php";
 
 error_reporting(1);
 if ($_SESSION['role'] === "0") {
@@ -26,6 +27,7 @@ if ($_POST['search']) {
 				<div class="search">
 					<div class="form-group">
 						<form action="user.php" method="post">
+							<input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
 							<input class="form-control" placeholder="search" type="text" name="search">
 							<button type="submit" class="btn btn-outline-primary">Search</button>
 						</form>
@@ -87,9 +89,9 @@ if ($_POST['search']) {
 								$i = 1;
 								foreach ($result as $value) { ?>
 								<tr>
-									<td><?php echo $i; ?></td>
-									<td><?php echo $value['name']; ?></td>
-									<td><?php echo substr($value['email'],0,10); ?></td>
+									<td><?php echo escape($i); ?></td>
+									<td><?php echo escape($value['name']); ?></td>
+									<td><?php echo escape($value['email']); ?></td>
 									<td>
 										<a href="useredit.php?id=<?php echo $value['id']; ?>" class="btn btn-outline-warning">Edit</a>
 										<a href="userdelete.php?id=<?php echo $value['id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure want to delete this item')">Delete</a>

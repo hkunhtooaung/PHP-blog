@@ -1,30 +1,50 @@
 <?php 
 session_start();
 require "config/config.php";
+require "config/common.php";
+
 
 if ($_POST) {
 	$name = $_POST['name'];
 	$email = $_POST['email'];
-	$password = $_POST['password'];
-
-	$stmt = $pdo->prepare("SELECT * FROM user WHERE email=:email");
-	$stmt->bindValue(':email',$email);
-	$stmt->execute();
-	$user = $stmt->fetch(PDO::FETCH_ASSOC);
-	
-	// print_r($user);
-
-	if($user) {
-		 echo "<script>alert('Email Duplicated')</script>";
+	$password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+	if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 4) {
+		if (empty($_POST['name'])) {
+			$nameError = 'Name should not be null';
+		}
+		if (empty($_POST['email'])) {
+			$emailError = 'Email should not be null';
+		}
+		
+		if (strlen($_POST['password']) < 4) {
+			if (empty($_POST['password'])) {
+			$passwordError = "password should not be null";
+			}else {
+				$passwordError = "password should at least 4";
+			}	
+		}
 	} else {
-		$stmt = $pdo->prepare("INSERT into user(name,email,password) VALUES (:name,:email,:password)");
-		$result = $stmt->execute(
-			array(':name'=>$name, ':email'=>$email, ':password'=>$password)
-		);
-		if ($result) {
-			echo "<script>alert('Successfully register, Please login');window.location.href='login.php'</script>";
+		$stmt = $pdo->prepare("SELECT * FROM user WHERE email=:email");
+		$stmt->bindValue(':email',$email);
+		$stmt->execute();
+		$user = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		// print_r($user);
+
+		if($user) {
+			 echo "<script>alert('Email Duplicated')</script>";
+		} else {
+			$stmt = $pdo->prepare("INSERT into user(name,email,password) VALUES (:name,:email,:password)");
+			$result = $stmt->execute(
+				array(':name'=>$name, ':email'=>$email, ':password'=>$password)
+			);
+			if ($result) {
+				echo "<script>alert('Successfully register, Please login');window.location.href='login.php'</script>";
+			}
 		}
 	}
+
+	
 }
 
 // error_reporting(1);
@@ -80,14 +100,18 @@ if ($_POST) {
 				<h3 align="center">Register New Account</h3>
 				<hr>
 				<form action="register.php" method="post">
+					<input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
 					<div class="form-group">
-						<input type="text" name="name" class="form-control" placeholder="Username" required>
+						<p style="margin: 0; padding: 0;"><font color="red" size="2"><?php echo empty($nameError) ? '' : '* '.$nameError ?></font></p>
+						<input type="text" name="name" class="form-control" placeholder="Username">
 					</div>
 					<div class="form-group"> 
-						<input type="email" name="email" class="form-control" placeholder="Enter your Email"required>
+						<p style="margin: 0; padding: 0;"><font color="red" size="2"><?php echo empty($emailError) ? '' : '* '.$emailError ?></font></p>
+						<input type="email" name="email" class="form-control" placeholder="Enter your Email">
 					</div>
 					<div class="form-group">
-						<input type="password" name="password" class="form-control" placeholder="Password"required>
+						<p style="margin: 0; padding: 0;"><font color="red" size="2"><?php echo empty($passwordError) ? '' : '* '.$passwordError ?></font></p>
+						<input type="password" name="password" class="form-control" placeholder="Password">
 					</div>
 					
 					<div class="container">

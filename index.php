@@ -1,5 +1,6 @@
 <?php 
 require 'config/config.php';
+require 'config/common.php';
 session_start();
 if (empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])) {
 	header("location: login.php");
@@ -84,7 +85,7 @@ $result = $stmt->fetchAll();
 				<a href="blogdetail.php?post_id=<?php echo $value['id'] ?>">
 					<div class="card" >
 					<div class="card-header">
-						<h5><?php echo $value['title']; ?></h5>
+						<h5><?php echo escape($value['title']); ?></h5>
 					</div>
 					<div class="card-body">
 						<img src="admin/images/<?php echo $value['image'] ?>" width="350" height="200">
@@ -102,14 +103,14 @@ $result = $stmt->fetchAll();
 	        		<li class="page-item"><a href="?pageno=1" class="page-link">First</a></li>
 
 	        		<li class="page-item <?php if($pageno <= 1) { echo 'disabled';} ?>">
-	        			<a class="page-link" href="<?php if($pageno <= 1) {echo '#';} else { echo "?pageno=".($pageno - 1);} ?>" >Previous</a>
+	        			<a class="page-link" href="<?php if($pageno <= 1) {echo '#';} else { echo "?pageno=".($pageno - 1);} ?>" ><< Previous</a>
 	        		</li>
 
 	 
 	        		<li class="page-item"><a href="#" class="page-link"><?php echo $pageno; ?></a></li>
 	        		
 	        		<li class="page-item <?php if($pageno >= $total_pages){ echo 'disabled'; } ?>">
-	        			<a href="<?php if($pageno >= $total_pages) {echo '#';} else { echo '?pageno='.($pageno+1);} ?>" class="page-link">Next</a>
+	        			<a href="<?php if($pageno >= $total_pages) {echo '#';} else { echo '?pageno='.($pageno+1);} ?>" class="page-link">Next >></a>
 	        		</li>
 	        		
 	        		<li class="page-item"><a href="<?php echo '?pageno='.$total_pages ?>" class="page-link">Last</a></li>
